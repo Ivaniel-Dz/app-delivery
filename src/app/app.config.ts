@@ -3,6 +3,12 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 
+// Configuración principal de la aplicación Angular
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  providers: [
+    // Optimiza la detección de cambios en la zona de Angular para mejorar el rendimiento
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    // Proporciona la configuración de rutas definida en app.routes.ts
+    provideRouter(routes),
+  ],
 };
