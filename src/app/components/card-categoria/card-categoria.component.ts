@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CardCategoriaComponent {
 
-  //Comunicacion entre padre e hijo
+  //Comunicación entre padre e hijo
   //card: hijo, home: padre
   @Input({required:true}) categoria!:Categoria;
 }

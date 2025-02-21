@@ -14,7 +14,7 @@ export const routes: Routes = [
     title: 'Home', // Título de la pestaña cuando se accede a esta ruta
   },
   {
-    path: 'articulo',
+    path: 'articulo/:id',
     component: ArticuloComponent,
     title: 'Articulo',
   },
