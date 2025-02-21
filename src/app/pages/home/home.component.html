@@ -1,1 +1,5 @@
-<p>home works!</p>
+<div id="categorias-container">
+  <app-card-categoria *ngFor="let categoria of categorias" [categoria]="categoria"
+  [routerLink]="['/categoria']" routerLinkActive="router-link-active">
+  </app-card-categoria>
+</div>

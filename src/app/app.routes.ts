@@ -34,7 +34,7 @@ export const routes: Routes = [
     title: 'Perfil',
   },
   {
-    path: 'rubro',
+    path: 'categoria/:id',
     component: RubroComponent,
     title: 'Rubro',
   },

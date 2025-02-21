@@ -1,4 +1,4 @@
- @use '../../../assets/styles/variables.scss';
+ @use '../../../../public/styles/variables.scss';
 
 header{
   position: relative;
@@ -14,7 +14,7 @@ header{
 header::before{
   position: absolute;
   content: "";
-  background-image: url(../../../assets/images/portada.jpg);
+  background-image: url(../../../../public/images/portada.jpg);
   background-position: center;
   background-size: cover;
   top: 0;
@@ -38,7 +38,7 @@ h1{
 }
 
 .extendido{
-  height: 300px;
+  height: 250px;
   background-color: unset;
 }
 

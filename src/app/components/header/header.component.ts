@@ -1,7 +1,6 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { HeaderService } from '../../services/header.service';
 import { CommonModule } from '@angular/common';
-import { iif } from 'rxjs';
 
 @Component({
   selector: 'app-header',
