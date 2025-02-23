@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tab',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './tab.component.html',
   styleUrl: './tab.component.scss',
 })

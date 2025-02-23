@@ -4,12 +4,12 @@ import { ProductosService } from '../../services/productos.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Producto } from '../../interfaces/productos';
 import { CardProductoComponent } from '../../components/card-producto/card-producto.component';
-import { CommonModule } from '@angular/common';
+
 import { CategoriasService } from '../../services/categorias.service';
 
 @Component({
   selector: 'app-rubro',
-  imports: [CommonModule, RouterModule, CardProductoComponent],
+  imports: [RouterModule, CardProductoComponent],
   templateUrl: './rubro.component.html',
   styleUrl: './rubro.component.scss',
 })

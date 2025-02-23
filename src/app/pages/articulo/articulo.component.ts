@@ -3,14 +3,14 @@ import { HeaderService } from '../../services/header.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductosService } from '../../services/productos.service';
 import { Producto } from '../../interfaces/productos';
-import { CommonModule } from '@angular/common';
+
 import { ContadorCantidadComponent } from '../../components/contador-cantidad/contador-cantidad.component';
 import { CartService } from '../../services/cart.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-articulo',
-  imports: [CommonModule, ContadorCantidadComponent,FormsModule],
+  imports: [ContadorCantidadComponent, FormsModule],
   templateUrl: './articulo.component.html',
   styleUrl: './articulo.component.scss',
 })

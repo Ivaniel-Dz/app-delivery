@@ -1,6 +1,6 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { HeaderService } from '../../services/header.service';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Busqueda } from '../../interfaces/busqueda';
 import { CardProductoComponent } from '../../components/card-producto/card-producto.component';
@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-buscar',
-  imports: [CommonModule, FormsModule, RouterModule ,CardProductoComponent],
+  imports: [FormsModule, RouterModule, CardProductoComponent],
   templateUrl: './buscar.component.html',
   styleUrl: './buscar.component.scss'
 })
@@ -19,13 +19,15 @@ export class BuscarComponent {
   headerService = inject(HeaderService);
   productosService = inject(ProductosService)
   productos: WritableSignal<Producto[]> = signal([]);
+  cargando = signal(true);
 
   //Cada que cargue:
   ngOnInit(): void {
     // cambia el valor de titulo asignado
     this.headerService.titulo.set('Buscar');
     // agrega todo los productos en búsqueda sin filtrar
-    this.productosService.getAll().then(res => this.productos.set(res))
+    this.productosService.getAll().then(res => this.productos.set(res));
+    this.cargando.set(false);
   }
 
   parametrosBusqueda:Busqueda = {
@@ -35,7 +37,9 @@ export class BuscarComponent {
   }
 
   async buscar(){
+    this.cargando.set(true);
     this.productos.set(await this.productosService.buscar(this.parametrosBusqueda));
+    this.cargando.set(false);
   }
 
 }

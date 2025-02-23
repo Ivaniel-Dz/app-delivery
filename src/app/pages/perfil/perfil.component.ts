@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { HeaderService } from '../../services/header.service';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Perfil } from '../../interfaces/perfil';
 import { PerfilService } from '../../services/perfil.service';
 
 @Component({
   selector: 'app-perfil',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
 })

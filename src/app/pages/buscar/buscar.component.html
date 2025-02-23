@@ -13,21 +13,29 @@
       <div class="apto-container">
         <img src="/icons/vegano.svg" alt="Apto vegano">
         <input type="checkbox" name="vegano" id="vegano" [(ngModel)]="parametrosBusqueda.aptoVegano" #vegano="ngModel">
-      <span>Apto vegano</span>
+        <span>Apto vegano</span>
+      </div>
     </div>
-  </div>
   </form>
 
-<div id="contenedor-productos" *ngIf="productos().length !== 0; else sinResultado">
-  <app-card-producto
-  *ngFor="let producto of productos()"
-  [producto]="producto"
-  [routerLink]="['/articulo',producto.id]"
-  >
-</app-card-producto>
-</div>
+  @defer (when !cargando()) {
+    @if (productos().length !== 0) {
+      <div id="contenedor-productos">
+        @for (producto of productos(); track producto) {
+          <app-card-producto
+            [producto]="producto"
+            [routerLink]="['/articulo',producto.id]"
+            >
+          </app-card-producto>
+        }
+      </div>
+    } @else {
+      <h2>Tu búsqueda no arrojó ningún resultado</h2>
+    }
+}@loading(minimum 500ms) {
+  <div class="flex-center">
+    <img src="/icons/spinner.svg" alt="loading">
+  </div>
+}
 
-<ng-template #sinResultado>
-  <h2>Tu búsqueda no arrojó ningun resultado</h2>
-</ng-template>
 </section>
