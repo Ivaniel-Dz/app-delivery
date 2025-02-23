@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { HeaderService } from '../../services/header.service';
 import { CategoriasService } from '../../services/categorias.service';
 import { Categoria } from '../../interfaces/categorias';
@@ -18,7 +18,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   //Infectamos el servicio de header a este componente
   headerService = inject(HeaderService);
   categoriasService = inject(CategoriasService);
-  categorias: Categoria[] = [];
+  
+  //signal solo actualiza la categorias y no todo la pagina
+  categorias:WritableSignal<Categoria[]> = signal([]);
 
   //Cada vez que carga el valor
   ngOnInit(): void {
@@ -26,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.headerService.titulo.set('Home');
     this.headerService.extendido.set(true);
     //carga los datos de BBDD
-    this.categoriasService.getAll().then((res) => (this.categorias = res));
+    this.categoriasService.getAll().then(res => this.categorias.set(res));
   }
 
   ngOnDestroy(): void {

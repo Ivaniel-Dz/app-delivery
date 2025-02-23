@@ -63,6 +63,7 @@ h2{
 }
 
 #mas{
+  height: 38px;
   font-size: xx-large;
   text-decoration: none;
   color: black;
@@ -107,6 +108,10 @@ h2{
   padding: 15px;
   border-radius: 10px;
   font-weight: bold;
+}
+
+#boton-editar-direccion{
+  padding-right: 5px;
 }
 
 dialog{

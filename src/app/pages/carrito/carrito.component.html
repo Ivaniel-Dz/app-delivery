@@ -1,47 +1,49 @@
 <ng-container *ngIf="cartService.carrito.length !== 0, else sinCarrito">
-<div id="tarjetas-container" class="margen-chico">
-  <div *ngFor="let producto of cartService.carrito, index as i" class="tarjeta-producto-container">
-    <ng-container *ngIf="productosCarrito[i]" >
-      <div id="izq" [ngStyle]="{'background-image': 'url('+productosCarrito[i].fotoUrl+')'}">
-        <div>
-          <img *ngIf="productosCarrito[i].esVegano" src="/icons/vegano.svg" alt="Apto vegano">
-          <img *ngIf="productosCarrito[i].esCeliaco" src="/icons/celiaco.png" alt="Apto celiaco">
-        </div>
+  <section>
+    <div id="tarjetas-container" class="margen-chico">
+      <div *ngFor="let producto of cartService.carrito, index as i" class="tarjeta-producto-container">
+        <ng-container *ngIf="productosCarrito()[i]" >
+          <div id="izq" [ngStyle]="{'background-image': 'url('+productosCarrito()[i].fotoUrl+')'}">
+            <div>
+              <img *ngIf="productosCarrito()[i].esVegano" src="/icons/vegano.svg" alt="Apto vegano">
+              <img *ngIf="productosCarrito()[i].esCeliaco" src="/icons/celiaco.png" alt="Apto celiaco">
+            </div>
+          </div>
+          <div id="centro">
+            <p class="negrita">{{productosCarrito()[i].nombre}} </p>
+            <p *ngIf="producto.notas !== ''">{{producto.notas}}</p>
+            <app-contador-cantidad [cantidadInicial]="producto.cantidad" (cantidadCambiada)="cambiarCantidadProducto(producto.idProducto,$event)"></app-contador-cantidad>
+          </div>
+          <div id="der">
+            <button id="borrar" (click)="eliminarProducto(producto.idProducto)">
+              <img src="/icons/borrar.png" alt="">
+            </button>
+            <p class="negrita">${{productosCarrito()[i].precio}}</p>
+          </div>
+        </ng-container>
       </div>
-      <div id="centro">
-        <p class="negrita">{{productosCarrito[i].nombre}} </p>
-        <p *ngIf="producto.notas !== ''">{{producto.notas}}</p>
-        <app-contador-cantidad [cantidadInicial]="producto.cantidad"  (cantidadCambiada)="cambiarCantidadProducto(producto.idProducto, $event)"></app-contador-cantidad>
-      </div>
-      <div id="der">
-        <button id="borrar" (click)="eliminarProducto(producto.idProducto)">
-          <img src="/icons/borrar.png" alt="">
-        </button>
-        <p class="negrita">${{productosCarrito[i].precio}}</p>
-      </div>
-    </ng-container>
-  </div>
-</div>
-<div class="flex-center">
-  <a id="mas" [routerLink]="['/']" routerLinkActive="router-link-active" >+</a>
-</div>
+    </div>
+    <div class="flex-center">
+      <a id="mas" [routerLink]="['/']" routerLinkActive="router-link-active" >+</a>
+    </div>
+</section>
 
 <section class="margen-chico" id="informacion">
   <h3>Dirección de envío</h3>
   <div class="flex-apart" id="envios-container">
     <div>
       <ng-container *ngIf="perfilService.perfil(), else sinDatosEnvio">
-      <h4> {{ perfilService.perfil()!.nombre }} </h4>
-      <p> {{ perfilService.perfil()!.direccion }} - {{ perfilService.perfil()?.telefono }} </p>
-      <p> {{ perfilService.perfil()!.detalleEntrega }} </p>
+        <h4>{{perfilService.perfil()!.nombre}}</h4>
+        <p>{{perfilService.perfil()!.direccion}} - {{perfilService.perfil()?.telefono}}</p>
+        <p>{{perfilService.perfil()!.detalleEntrega}}</p>
       </ng-container>
       <ng-template #sinDatosEnvio>
-        <p>Ingrese tus datos de envió</p>
+        <p>Ingresá tus datos de envío</p>
       </ng-template>
     </div>
     <div>
       <a [routerLink]="['/perfil']" routerLinkActive="router-link-active" >
-        <img src="/icons/lapiz.png" alt="Editar">
+        <img id="boton-editar-direccion" src="/icons/lapiz.png" alt="Editar">
       </a>
     </div>
   </div>
@@ -52,21 +54,19 @@
       <p class="negrita">Total</p>
     </div>
     <div id="montos">
-      <p class="negrita">$<span> {{subtotal}} </span></p>
-      <p >$<span> {{ delivery }} </span></p>
-      <p class="negrita">$<span> {{ total }} </span></p>
+      <p class="negrita">${{subtotal}}</p>
+      <p>${{this.configService.configuracion().costoEnvio}}</p>
+      <p class="negrita">${{total}}</p>
     </div>
   </div>
-  <button id="enviar" (click)="enviarMensaje()">Enviar mensaje</button>
-</section>
+  <button id="enviar" [disabled]="!perfilService.perfil()" (click)="enviarMensaje()">Realizar pedido</button>
+  </section>
 </ng-container>
-
-
 <ng-template #sinCarrito>
   <h2>Tu carrito está vacío</h2>
 </ng-template>
 
-<dialog method="modal" #dialog>
+<dialog method="modal" #dialog>/
   <p>¿Pudiste realizar el pedido?</p>
   <div>
     <button (click)="finalizarPedido()"><span>Sí</span><span>Reiniciar pedido</span></button>

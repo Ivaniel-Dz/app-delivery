@@ -1,8 +1,9 @@
-<div id="contenedor-productos">
+
+<section id="contenedor-productos">
   <app-card-producto
-    *ngFor="let producto of productos"
+    *ngFor="let producto of productos()"
     [producto]="producto"
     [routerLink]="['/articulo', producto.id]"
     routerLinkActive="router-link-active"
   />
-</div>
+</section>

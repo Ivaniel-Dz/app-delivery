@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild, WritableSignal } from '@angular/core';
 import { HeaderService } from '../../services/header.service';
 import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { Producto } from '../../interfaces/productos';
 import { ProductosService } from '../../services/productos.service';
 import { Router, RouterModule } from '@angular/router';
 import { PerfilService } from '../../services/perfil.service';
+import { ConfigService } from '../../services/config.service';
 import { NUMERO_WHATSAPP } from '../../constants/telefono';
 
 @Component({
@@ -21,13 +22,14 @@ export class CarritoComponent {
   cartService = inject(CartService);
   productosService = inject(ProductosService);
   perfilService = inject(PerfilService);
+  configService = inject(ConfigService);
   router = inject(Router);
 
   //variable para guardar los productos del carrito
-  productosCarrito: Producto[] = [];
+  //signal solo actualiza los productos y no todo la pagina
+  productosCarrito: WritableSignal<Producto[]> = signal([]);
 
   subtotal: number = 0;
-  delivery: number = 100;
   total: number = 0;
 
   //DOM
@@ -38,11 +40,17 @@ export class CarritoComponent {
     //Cambia el titulo
     this.headerService.titulo.set('Carrito');
     //
-    this.cartService.carrito.forEach(async (itemCarrito) => {
-      const res = await this.productosService.getById(itemCarrito.idProducto);
-      if (res) this.productosCarrito.push(res);
+    this.buscarInformacionProductos().then(() => {
       this.calcularInformacion();
     });
+  }
+
+  async buscarInformacionProductos() {
+    for (let i = 0; i < this.cartService.carrito.length; i++) {
+      const itemCarrito = this.cartService.carrito[i];
+      const res = await this.productosService.getById(itemCarrito.idProducto);
+      if (res) this.productosCarrito.set([...this.productosCarrito(), res]);
+    }
   }
 
   eliminarProducto(idProducto: number) {
@@ -53,10 +61,10 @@ export class CarritoComponent {
     this.subtotal = 0;
     for (let i = 0; i < this.cartService.carrito.length; i++) {
       this.subtotal +=
-        this.productosCarrito[i].precio * this.cartService.carrito[i].cantidad;
+        this.productosCarrito()[i].precio *
+        this.cartService.carrito[i].cantidad;
     }
-
-    this.total = this.subtotal + this.delivery;
+    this.total = this.subtotal + this.configService.configuracion().costoEnvio;
   }
 
   //Actualiza el total de precio al agregar mas producto
@@ -76,18 +84,19 @@ export class CarritoComponent {
 `;
     }
     const mensaje = `
-    Hola! Soy ${
-      this.perfilService.perfil()?.nombre
-    }, y re quiero hacer el siguiente pedido:
-${pedido}
-Si te querés comunicar conmigo hacelo al Nº del que te hablo o al ${
-      this.perfilService.perfil()?.telefono
-    }.
-La dirección de envío es: ${this.perfilService.perfil()?.direccion} - ${
+      Hola! Soy ${
+        this.perfilService.perfil()?.nombre
+      }, y te quiero hacer el siguiente pedido:
+      ${pedido}
+      Si te querés comunicar conmigo hacelo al Nº del que te hablo o al ${
+        this.perfilService.perfil()?.telefono
+      }.
+      La dirección de envío es: ${this.perfilService.perfil()?.direccion} - ${
       this.perfilService.perfil()?.detalleEntrega
     }.
-Muchas gracias
-`;
+      Muchas gracias
+      `;
+
     const link = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURI(mensaje)}`;
     window.open(link, '_blank');
     this.dialog.nativeElement.showModal();

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { HeaderService } from '../../services/header.service';
 import { ProductosService } from '../../services/productos.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -9,18 +9,18 @@ import { CategoriasService } from '../../services/categorias.service';
 
 @Component({
   selector: 'app-rubro',
-  imports: [CommonModule, RouterModule,  CardProductoComponent],
+  imports: [CommonModule, RouterModule, CardProductoComponent],
   templateUrl: './rubro.component.html',
   styleUrl: './rubro.component.scss',
 })
 export class RubroComponent {
   //Infectamos los servicio a este componente
   headerService = inject(HeaderService);
-  productosService = inject(ProductosService);
   categoriasService = inject(CategoriasService);
   ac = inject(ActivatedRoute);
-  //variables
-  productos: Producto[] = [];
+
+  //signal solo actualiza productos y no todo la pagina
+  productos: WritableSignal<Producto[]> = signal([]);
 
   //Cada vez que carga la pagina
   ngOnInit(): void {
@@ -29,15 +29,16 @@ export class RubroComponent {
 
     this.ac.params.subscribe((params) => {
       if (params['id']) {
-        this.categoriasService.getById(parseInt(params['id']))
-          .then(categoria => {
-            if(categoria){
+        this.categoriasService
+          .getById(parseInt(params['id']))
+          .then((categoria) => {
+            if (categoria) {
               //Obtiene los productos x categoría
-              this.productos = categoria.productos;
+              this.productos.set(categoria.productos);
               //Obtiene el titulo de la categoría
               this.headerService.titulo.set(categoria.nombre);
             }
-          })
+          });
       }
     });
   }
