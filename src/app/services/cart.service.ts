@@ -5,7 +5,6 @@ import { Cart } from '../interfaces/carrito';
   providedIn: 'root',
 })
 export class CartService {
-  
   constructor() {
     const cart = localStorage.getItem('cart');
     if (cart) {
@@ -58,4 +57,9 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify(this.carrito));
   }
 
+  vaciar() {
+    this.carrito = [];
+    localStorage.clear();
+  }
+  
 }

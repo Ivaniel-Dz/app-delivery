@@ -6,10 +6,11 @@ import { Busqueda } from '../../interfaces/busqueda';
 import { CardProductoComponent } from '../../components/card-producto/card-producto.component';
 import { ProductosService } from '../../services/productos.service';
 import { Producto } from '../../interfaces/productos';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-buscar',
-  imports: [CommonModule, FormsModule, CardProductoComponent],
+  imports: [CommonModule, FormsModule, RouterModule ,CardProductoComponent],
   templateUrl: './buscar.component.html',
   styleUrl: './buscar.component.scss'
 })
